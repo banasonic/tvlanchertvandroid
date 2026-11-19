@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#071842" />
+  <meta name="description" content="معاينة تفاعلية للانشر Android TV بنسبة 16:9 مع الطقس والصلاة والتطبيقات." />
+  <title>معاينة لانشر Android TV</title>
+  <link rel="stylesheet" href="./tv-preview.css" />
+  <script src="./tv-preview-weather.js" defer></script>
+  <script src="./tv-preview-prayer.js" defer></script>
+  <script src="./tv-preview-speed.js" defer></script>
+  <script src="./tv-preview.js" defer></script>
+</head>
+<body>
+  <main id="tv-screen" aria-label="واجهة لانشر Android TV بنسبة 16 إلى 9" data-page="home">
+    <svg class="etch" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true">
+      <g fill="none" stroke="rgba(207,240,255,.17)" stroke-width="1">
+        <path d="M24 23h390M24 67h312M24 111h280M24 155h260M34 805h410M65 857h420M1200 780h330M1230 830h390M1400 885h340M1510 965h360" />
+        <path d="M60 600h190M70 650h280M115 700h210M1050 710h290M1090 756h360M1160 900h380M30 940h240M1400 110h300M1340 75h400" />
+        <path d="M410 18v160M610 0v235M850 0v150M1080 0v190M1340 0v170M1600 0v205M1810 0v180" />
+        <path d="M110 740h250M300 670h190M515 730h260M740 820h260M940 665h270M1250 690h250M1500 740h280" />
+      </g>
+      <g fill="none" stroke="rgba(214,244,255,.11)" stroke-width="2">
+        <path d="M0 265h1920M0 592h1920M0 646h1920M0 1000h1920M0 1040h1920" />
+      </g>
+    </svg>
+    <div class="divider" aria-hidden="true"></div>
+
+    <div class="tools" aria-label="أدوات اللانشر">
+      <button class="tool" data-focus data-action="settings" aria-label="الإعدادات" title="الإعدادات"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.31.06-.62.06-.94s-.02-.63-.07-.94l2.03-1.58-2-3.46-2.39.96a7.1 7.1 0 0 0-1.63-.94L14.78 3h-4l-.36 3.04c-.6.23-1.14.55-1.63.94L6.4 6.02l-2 3.46 2.03 1.58a6.6 6.6 0 0 0 0 1.88L4.4 14.52l2 3.46 2.39-.96c.49.39 1.03.71 1.63.94l.36 3.04h4l.36-3.04c.6-.23 1.14-.55 1.63-.94l2.39.96 2-3.46-2.02-1.58ZM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" /></svg></button>
+      <button class="tool" data-focus data-action="storage" aria-label="التخزين" title="التخزين"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v3H5zm1 4h12v11H6zm3 2v2h6v-2z" /></svg></button>
+      <button class="tool" data-focus data-action="media" aria-label="مشغل الوسائط" title="مشغل الوسائط"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zm6 3v8l7-4z" /></svg></button>
+      <button class="tool" id="wifi-tool" data-focus data-action="wifi" aria-label="Wi-Fi واختبار السرعة" title="Wi-Fi واختبار السرعة"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 8.8C7.1 3.6 16.9 3.6 23 8.8L21.2 11C16.1 6.7 7.9 6.7 2.8 11L1 8.8Zm3.6 4.1c4.1-3.5 10.7-3.5 14.8 0l-1.8 2.2c-3.1-2.6-8.1-2.6-11.2 0l-1.8-2.2Zm4 4.3a5 5 0 0 1 5.8 0L12 20l-3.4-2.8Z" /></svg></button>
+      <button class="tool" id="bluetooth-tool" data-focus data-action="bluetooth" aria-label="Bluetooth" title="Bluetooth"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.7 7 12 1.5V10l-5-5-1.4 1.4L11 12l-5.4 5.6L7 19l5-5v8.5l5.7-5.5L13.4 12 17.7 7ZM14 5.3l1.6 1.6L14 8.5V5.3Zm1.6 12.4L14 19.3v-3.2l1.6 1.6Z" /></svg></button>
+      <button class="tool" data-focus data-action="ram" aria-label="الذاكرة" title="الذاكرة"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4zM2 8h2v2H2zm0 6h2v2H2zm18-6h2v2h-2zm0 6h2v2h-2zM7 9h3v6H7zm6 0h4v2h-4zm0 4h4v2h-4z" /></svg></button>
+    </div>
+
+    <div class="clock" id="clock" aria-live="off">--:--</div>
+    <div class="date-line" id="date-line">—</div>
+    <button class="weather-pill" id="weather-pill" data-focus data-action="weather" aria-label="فتح الطقس"><span class="weather-pill-icon" id="weather-pill-icon">◌</span><span id="weather-pill-text">جاري تحميل الطقس…</span></button>
+
+    <header class="greeting"><h1 id="greeting-text">مساء الخير</h1><p id="greeting-date">—</p></header>
+    <nav class="tabs" aria-label="الأقسام">
+      <button class="tab" id="home-tab" data-focus data-action="page" data-page="home" aria-selected="true">الرئيسية</button>
+      <button class="tab" id="apps-tab" data-focus data-action="page" data-page="apps" aria-selected="false">التطبيقات</button>
+    </nav>
+
+    <section id="page-home" class="page home-page" aria-label="الرئيسية">
+      <div class="featured-title" id="featured-title">التطبيقات المميزة</div>
+      <section class="featured" id="featured-slots" aria-label="التطبيقات المميزة"></section>
+      <section class="weather-panel" id="weather-panel" aria-label="حالة الطقس">
+        <button class="weather-card" data-focus data-action="weather" aria-label="تفاصيل الطقس والتوقعات"><span class="weather-card-mark" id="weather-card-mark">◌</span><span class="weather-card-copy"><strong id="weather-card-temp">—°</strong><span id="weather-card-desc">جاري تحميل الطقس…</span></span><span class="weather-card-meta" id="weather-card-meta">7 أيام</span><span class="weather-card-arrow">›</span></button>
+      </section>
+      <button class="prayer" id="prayer-card" data-focus data-action="prayer" aria-label="فتح مواقيت الصلاة">
+        <span class="prayer-kicker" id="prayer-kicker">مواقيت الصلاة</span>
+        <span class="prayer-location" id="prayer-location">—</span>
+        <span class="next-label" id="next-label">الصلاة القادمة</span>
+        <span class="next-prayer"><strong id="next-prayer-name">—</strong><time id="next-prayer-time">--:--</time></span>
+        <span class="remaining"><span id="remaining-label">متبقي</span><strong id="remaining-time">--:--:--</strong></span>
+        <span class="prayer-times" id="prayer-times"></span>
+        <span class="prayer-footer" id="prayer-footer">—</span>
+      </button>
+      <h2 class="apps-heading" id="dock-heading">تطبيقاتي</h2>
+      <section class="dock" id="dock-slots" aria-label="شريط التطبيقات"></section>
+      <div class="dock-hint" id="dock-hint">اضغط مطولاً لإضافة تطبيق أو استبداله</div>
+    </section>
+
+    <section id="page-apps" class="page apps-page" aria-label="التطبيقات" hidden>
+      <div class="apps-page-header"><div><p class="eyebrow" id="apps-eyebrow">مكتبة التلفاز</p><h2 id="apps-page-title">كل التطبيقات</h2></div><label class="filter-label"><span id="filter-caption">التصنيف</span><select id="app-filter" data-focus><option value="all">الكل</option><option value="video">فيديو</option><option value="music">موسيقى</option><option value="tools">أدوات</option></select></label></div>
+      <div class="apps-grid" id="apps-grid" aria-label="قائمة التطبيقات"></div>
+      <p class="apps-page-note" id="apps-page-note">هذه معاينة للواجهة. تشغيل التطبيقات المثبتة فعلياً يحتاج نسخة Android TV الأصلية.</p>
+    </section>
+
+    <div class="system-caption" id="system-caption">معاينة الويب · أدوات النظام توضيحية</div>
+
+    <div id="modal-overlay" class="modal-overlay" hidden>
+      <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <header class="dialog-header"><div><p class="dialog-eyebrow" id="modal-eyebrow">إعدادات اللانشر</p><h2 id="modal-title">—</h2></div><button class="dialog-close" data-focus data-action="close-modal" aria-label="إغلاق">×</button></header>
+        <div class="dialog-content" id="modal-content"></div>
+      </section>
+    </div>
+
+    <div id="standby-overlay" class="standby-overlay" hidden>
+      <div class="standby-card"><p class="eyebrow" id="standby-eyebrow">وضع الخمول</p><h2 id="standby-text">الشاشة خافتة لتوفير الطاقة</h2><button data-focus data-action="wake" id="standby-wake">اضغط للعودة</button></div>
+    </div>
+    <div id="live-region" class="visually-hidden" aria-live="polite"></div>
+  </main>
+
+  <section id="orientation-gate" aria-live="polite">
+    <div class="gate-card">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#bcefff" stroke-width="1.6" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="1"/><path d="M7 21h10M12 19v2M8 10h8"/></svg>
+      <h2 id="orientation-title">معاينة Android TV</h2>
+      <p id="orientation-copy">هذه صفحة مستقلة بعرض 16:9، وليست واجهة هاتف. للحصول على عرض تلفاز كامل استخدم شاشة أفقية أو دوّر جهازك.</p>
+      <button id="orientation-button">فتح العرض الأفقي بملء الشاشة</button>
+      <p id="gate-error"></p>
+    </div>
+  </section>
+</body>
+</html>
