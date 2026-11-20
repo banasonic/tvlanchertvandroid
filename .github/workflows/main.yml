@@ -43,18 +43,26 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          accept-android-sdk-licenses: false
+          log-accepted-android-sdk-licenses: false
+          packages: ""
 
       - name: Install Android SDK packages
         run: |
           set +e
-          yes | sdkmanager --licenses >/dev/null
-          license_status=${PIPESTATUS[1]}
+          yes | sdkmanager --install \
+            "platform-tools" \
+            "platforms;android-36" \
+            "build-tools;36.0.0" \
+            "ndk;27.1.12297006" \
+            "cmake;3.22.1"
+          sdkmanager_status=${PIPESTATUS[1]}
           set -e
-          if [ "${license_status}" -ne 0 ]; then
-            echo "::error::Could not accept Android SDK licenses"
-            exit "${license_status}"
+          if [ "${sdkmanager_status}" -ne 0 ]; then
+            echo "::error::Could not install the required Android SDK packages"
+            exit "${sdkmanager_status}"
           fi
-          sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
 
       - name: Install JavaScript dependencies
         run: pnpm install --frozen-lockfile
