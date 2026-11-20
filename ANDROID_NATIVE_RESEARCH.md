@@ -21,3 +21,8 @@
 [6]: https://docs.expo.dev/modules/get-started/ "Expo Modules API: Get started"
 [7]: https://github.com/react-native-webview/react-native-webview/blob/master/docs/Reference.md "React Native WebView reference"
 [8]: https://docs.expo.dev/versions/latest/sdk/notifications/ "Expo Notifications API"
+
+- يتيح إجراء Android Actions تعطيل قبول جميع SDK licenses عبر `accept-android-sdk-licenses: false`، وتعطيل تثبيت الحزم الافتراضي بتمرير `packages: ''`. لذلك يقتصر Workflow على الحزم المطلوبة صراحةً، ولا يشغّل `sdkmanager --licenses` الشامل. يتضمن إعداد البناء حزم SDK وNDK وCMake المستخدمة من التطبيق ومكتبات React Native. [9] [10]
+
+[9]: https://github.com/android-actions/setup-android
+[10]: https://github.com/android-actions/setup-android/blob/v3/action.yml "setup-android v3 action inputs"
